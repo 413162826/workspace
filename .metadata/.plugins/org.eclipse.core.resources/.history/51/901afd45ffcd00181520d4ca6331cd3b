@@ -1,0 +1,30 @@
+package com.suguowen.集合源码.Topk;
+
+import java.util.Collection;
+import java.util.PriorityQueue;
+
+//用优先级队列实现求N个数里前几名的算法
+public class TopK<E> {
+	private PriorityQueue<E> p;
+	private int k;
+	public TopK(int k) {
+		this.k = k;
+		this.p = new PriorityQueue<>(k);
+	}
+	public void add(E e) {
+		if(p.size() < k) {
+			p.add(e);
+			return;
+		}
+		Comparable<? super E> head = (Comparable<?  super E>p.peek());
+		if(head.compareTo(e) > 0) {
+			return;
+		}
+	}
+	public void addAll(Collection<? extends E> c) {
+		for(E e : c) {
+			add(e);
+		}
+	}
+	
+}

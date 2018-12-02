@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suguowen.dao.DynamicSQLMapper">
+<resultMap type="HashMap" id="Map">
+ 	<id column="ID_" property="id"/>
+	<result column="COMMEND_" property="commend"/> 
+</resultMap>
+<select id="selectUserByDynamicSQL" resultMap="Map">
+	SELECT count(1) FROM message 
+	<where>
+	<if test="object gt 0">
+	ID_ = #{object} OR
+	</if>
+	</where>
+
+</select>
+
+<select id="selectUserByDynamicSQLTwoParam" resultMap="Map">
+	SELECT count(1) FROM message 
+<!-- 	<trim prefix="where" prefixOverrides="AND |OR ">
+	<if test="object1 gt 0">
+	ID_ = #{object1} 
+	</if>
+	<if test="object2 gt 0">
+	OR ID_ = #{object2} 
+	</if>
+	</trim>
+ -->
+ 	<where>
+	<if test="object1 gt 0">
+	ID_ = #{object1} 
+	</if>
+	<if test="object2 gt 0">
+	OR ID_ = #{object2} 
+	</if>
+	</where>
+ 
+</select>
+
+<update id="updateUserByDynamicSQL">
+	update message 
+	<set>
+	<if test="object1 != null">COMMEND_=#{object1},</if>
+	<if test="object2 != null">CONTENT_=#{object2},</if>
+	<if test="object3 != null">DESCRIPTION =#{object3} </if>
+	</set>	
+	where 
+	ID_=1
+	
+</update>
+
+<select id="selectByUserForEach" resultType="java.util.ArrayList" >
+	select 
+	ID_,COMMEND_,DESCRIPTION,CONTENT_ 
+	FROM
+	message 
+	where 
+	ID_ in 
+	<foreach collection="set" index="index" separator="," open="(" close=")"  item="item">
+	#{item}
+	</foreach>
+	
+</select>
+
+</mapper>

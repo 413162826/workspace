@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suguowen.avg.dao.IPersonMapper">
+
+<resultMap type="com.suguowen.avg.model.Person" id="personMap">
+	<id column="name" property="name"/>
+	<result column="attack" property="attack"/>
+	<result column="defense" property="defense"/>
+	<result column="blood" property="blood"/>
+</resultMap>
+
+	<select id="selectUser" resultMap="personMap">
+		SELECT * FROM `person`
+	</select>
+	
+	<cache />
+	<select id="selectPersonCount" resultType="integer">
+	SELECT count(*) FROM `person`
+	</select>
+	
+	<insert id="insertPerson">
+	INSERT INTO person VALUES('小明', '荒野',1,1,1,1,1,1,1)
+	</insert>
+</mapper>

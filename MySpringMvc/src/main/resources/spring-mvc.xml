@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<!-- 扫描service的注解 -->
+<context:component-scan base-package="com.suguowen.springmvc"></context:component-scan>
+<!-- mvc注解驱动 -->
+<mvc:annotation-driven></mvc:annotation-driven>
+
+<!-- 文件上传 -->
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!-- 设置文件编码 -->
+	<property name="defaultEncoding" value="utf-8"></property>
+</bean>
+
+<!-- 拦截器 -->
+<mvc:interceptors>
+	<!-- 拦截的访问路径 -->
+ 	<mvc:interceptor>
+		<!-- 进行拦截的指定路径 -->
+		<mvc:mapping path="/userController/*"/>
+		<!-- 使用指定拦截器拦截 -->
+		<bean class="com.suguowen.springmvc.interceptor.LoginInterceptor"></bean>
+	</mvc:interceptor>
+ 	<mvc:interceptor>
+		<mvc:mapping path="/userController/*"/>
+		<bean class="com.suguowen.springmvc.interceptor.LoginInterceptor2"></bean>
+	</mvc:interceptor>
+</mvc:interceptors>
+
+
+<!-- 静态资源放行,放行location目录下的任何内容，访问的时候要遵循mapping格式 -->
+<mvc:resources location="/myHtml/" mapping="/myHtml/*"></mvc:resources>
+
+<!-- 统一配置视图管理器 -->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- <property name="prefix" value="/WEB-INF/"></property> -->
+	<property name="prefix" value="/myHtml/"></property>
+	<property name="suffix" value=".jsp"></property>
+	<property name="contentType" value="text/html;charset=utf-8"></property>
+</bean>
+
+</beans>

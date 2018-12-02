@@ -1,0 +1,27 @@
+.car_LicenseFront_img{
+	width:300px
+}
+
+#showPic p {
+				text-align: center;
+			}
+			
+			#showPic .licenseImg {
+				width: 50%;
+				float: left;
+				text-align: center;
+			}
+			
+			#showPic img {
+				width: 200px;
+			}
+			
+			#showPic #showPic {
+				width: 800px;
+				height: auto;
+			}
+			
+			#showPic .carImg {
+				width: 33.3%;
+				float: left;
+				text-align: center;

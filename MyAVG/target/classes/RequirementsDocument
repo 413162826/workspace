@@ -1,0 +1,15 @@
+#AVG我的冒险游戏开发#
+#需求文档#
+1.环境：spring+mybatis+springMVC
+1.剧情：主角离家出走，荒野求生，路上遇到各种坏人，打斗后获得装备经验成长，打败boss，游戏结束
+2.mysql：主角信息表，怪物表，装备表
+spring：各种类的注入反转
+springmvc：页面静态资源放行
+mybatis：查询数据库
+junit：对每一个部分进行调试
+dao:UserDao,monsterDao,equipmentDao
+service:显示数据信息,战斗过程,获得装备数据加成,
+Controler:数据Servlet,
+model:User,monster,equipment
+view:数据页,战斗页,胜利页,error页
+

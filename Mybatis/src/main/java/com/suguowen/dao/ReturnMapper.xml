@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suguowen.dao.ReturnMapper">
+	<!-- 1、基本类型 ：resultType=基本类型 2、List类型： resultType=List中元素的类型 3、Map类型 单条记录：resultType 
+		=map 多条记录：resultType =Map中value的类型 -->
+	<resultMap type="com.suguowen.model.User" id="nameMatch">
+		<id column="ID_" property="id" />
+		<result column="COMMEND_" property="commend" />
+		<result column="CONTENT_" property="content" />
+	</resultMap>
+
+	<select id="selectUserSingleReturn" resultType="String">
+		select COMMEND_
+		from message where ID_=1
+	</select>
+
+	<select id="selectUserMulReturn" resultType="String">
+		select COMMEND_ from
+		message
+	</select>
+
+	<select id="selectUserMulReturn1" resultMap="nameMatch">
+		select *
+		from
+		message where ID_ = 1
+	</select>
+
+	<select id="selectUserMulReturn2" resultMap="nameMatch">
+		select * from
+		message 
+	</select>
+</mapper>

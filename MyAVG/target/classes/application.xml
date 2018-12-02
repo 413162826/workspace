@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- 上下文扫描器 -->
+	<context:component-scan base-package="com.suguowen.avg"></context:component-scan>
+	<!-- 引入dataSource -->
+	<context:property-placeholder
+		location="classpath:properties.properties,classpath:redis.properties" />
+
+	<!-- 引入数据库 alibaba连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${jdbc.driverClass}"></property>
+		<property name="url" value="${jdbc.jdbcUrl}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+
+	<!-- 配置JdbcTemplate操作数据库类的实例,并引入dataSource数据源 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+
+	<!-- Mybaits整合 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis.xml"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="com/suguowen/avg/dao/mapper/*.xml"></property>
+
+	</bean>
+	<!-- 扫描接口 -->
+	<bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描dao,注意扫描后dao所有类不能再用注解注入，不然使用dao类的时候会异常找到多个 -->
+		<property name="basePackage" value="com.suguowen.avg.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
+	</bean>
+
+	<!-- spring缓存 -->
+	<!-- 缓存驱动注解 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+
+	<!-- 实例化simpleCacheManager实例(缓存管理者) -->
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<!-- 嵌套bean的使用(效果跟ref注入一样,区别是嵌套bean不能被注入其他bean,是个隐蔽的存在,提高内聚性，减低灵活性) -->
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean">
+					<property name="beanName" value="selectUserByCount"></property>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+<!-- 事务管理 -->
+<!-- 声明式事务管理 -->
+<tx:advice id="advisor" transaction-manager="transactionManager">
+	<tx:attributes>
+		<tx:method name="*" rollback-for="Exception" propagation="REQUIRED"/>
+	</tx:attributes>
+</tx:advice>
+
+<!-- 事务管理器 -->
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+</bean>
+
+<!-- 切面 -->
+<bean id="aopTest" class="com.suguowen.avg.aop.AopTest"></bean>
+
+<!-- AOP事务管理 -->
+<aop:config>
+<aop:pointcut expression="execution(* com.suguowen.avg.service.*.*(..))" id="pointcut"/>
+<aop:advisor advice-ref="advisor" pointcut-ref="pointcut"/>
+<aop:aspect ref="aopTest">
+	<aop:before method="afterAop" pointcut-ref="pointcut"/>
+</aop:aspect>
+</aop:config>
+
+
+
+	 <!-- redis连接池 -->
+	<!--<bean id="jedisConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.maxActive}"></property>
+		<property name="maxIdle" value="${redis.maxIdle}"></property>
+		<property name="maxWaitMillis" value="${redis.maxWait}"></property>
+		<property name="testOnBorrow" value="${redis.testOnBorrow}"></property>
+	</bean>
+	redis连接工厂
+	<bean id="connectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.host}"></property>
+		<property name="port" value="${redis.port}"></property>
+		<property name="password" value="${redis.password}"></property>
+		<property name="poolConfig" ref="jedisConfig"></property>
+	</bean>
+	redis操作模板，这里采用尽量面向对象的模板
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		如果不配置Serializer，那么存储的时候只能使用String，如果用对象类型存储，那么会提示错误 can't cast to 
+			String！！！
+		<property name="keySerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+		开启事务
+		<property name="enableTransactionSupport" value="true" />
+	</bean> -->
+</beans>

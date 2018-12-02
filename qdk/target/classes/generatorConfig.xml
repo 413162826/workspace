@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+<classPathEntry location="E:\mashen\Resourse\generator\mysql-connector-java-5.1.40.jar"/>
+  <context id="context1">
+  <!-- 1.关闭自动生成注释(给生成文件的注释太多了,影响读程序) -->
+  <commentGenerator>
+  <property name="suppressAllComments" value="true"/>
+  </commentGenerator>
+  
+  <!-- 2.连接数据库 -->
+    <jdbcConnection 
+    connectionURL="jdbc:mysql://192.168.20.111:3306/qdk?useSSL=false"
+    driverClass="com.mysql.jdbc.Driver" 
+    password="123456" 
+    userId="root" />
+    
+    <javaModelGenerator targetPackage="com.suguowen.model" targetProject="qdk/src/main/java" />
+    <sqlMapGenerator targetPackage="com.suguowen.dao.mapper" targetProject="qdk/src/main/java" />
+    <javaClientGenerator targetPackage="com.suguowen.dao" targetProject="qdk/src/main/java" type="XMLMAPPER" />
+    <table schema="gf_car" tableName="gf_car">
+    </table>
+  </context>
+</generatorConfiguration>

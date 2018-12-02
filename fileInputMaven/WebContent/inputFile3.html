@@ -1,0 +1,63 @@
+ 	<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="resource/bookstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script type="text/javascript " src="resource/js/jquery.min.js"></script>
+<script type="text/javascript" src="resource/bookstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript " src="resource/js/ajaxfileupload.js"></script>
+<title>上传文件</title>
+</head>
+<body>
+	<form action="inputFileServlet3" method="post" class="form-inline" enctype="multipart/form-data">
+		<div class="form-group">
+			<input type="file" id="fileId" name="file">
+			<!-- 核心ajax -->
+			<input type="button" value="上传" onclick="ajaxFileUpload()" />
+			<input type="hidden" value="" id=fileUrl name="fileName" value="data" />
+			<img id="fileImage" style="width: 100px; height: 100px" />
+		</div>
+		<br> <br> <br> <br>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+	<script type="text/javascript">
+	
+	
+	
+	
+	
+	
+		function ajaxFileUpload() {
+			$.ajaxFileUpload({
+				url : 'inputFileServlet3', //用于文件上传的服务器端请求地址
+				secureuri : false, //是否需要安全协议，一般设置为false
+				fileElementId : 'fileId', //文件上传域的ID
+				dataType : 'text', //返回值类型 一般设置为json
+				success : function(data,status) //服务器成功响应处理函数
+				{	
+					alert(data);
+					$("#fileImage").attr("src",".."+data);//展示已上传的图片
+					$("#fileUrl").val(data);//保存图片地址到隐藏域，当表单正式提交时获取地址即可，不需要再做文件存储
+				},
+				error : function(data, e)//服务器响应失败处理函数
+				{
+					alert(e);
+				}
+			})
+			return false;
+		}
+
+		function ajaxFileUpload2() {
+			$.ajax({
+				type : 'post',
+				url : 'inputFileServlet3',
+				success : function(data) {
+					alert(data);
+					$("#fileImage").attr("src",
+							"http://localhost:8089/Servlet2" + data);//展示已上传的图片
+				}
+			});
+		}
+	</script>
+</body>
+</html>

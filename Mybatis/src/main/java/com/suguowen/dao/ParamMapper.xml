@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suguowen.dao.ParamMapper">
+
+
+<!-- 	  
+	一个参数
+	  多个参数
+	 *一个对象 
+ -->
+
+<select id="getUserByOneParam" resultType="String">
+select count(1) from message where ID_=#{object}
+</select>
+
+<select id="getUserByMulParam" parameterType="map" resultType="String" >
+select ID_,COMMEND_ from message where COMMEND_=#{commend} AND ID_=#{id}
+</select>
+
+<select id="getUserByObject" resultType="String">
+select ID_,COMMEND_ from message where ID_=#{id} AND COMMEND_=#{commend}
+</select>
+</mapper>

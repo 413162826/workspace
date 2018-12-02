@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>文件上传</title>
+	</head>
+	<body>
+	<!-- enctype="multipart/form-data"必须，否则上传可能失败 -->
+	<form method="post" enctype="multipart/form-data" action="fileUploadController/fileUpload1">
+		<input type="file" name="myFile" value="文件上传"/>
+		<input type="submit" name="fileUpload1" value="提交" />
+	</form>
+	</body>
+</html>

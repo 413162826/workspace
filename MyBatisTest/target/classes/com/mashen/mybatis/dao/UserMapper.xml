@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mashen.mybatis.dao.UserMapper">
+<!-- 
+功能：
+1.同名接口的实现xml，id值=方法名，resultType=返回值，无值默认，内容是sql语句
+2.开启二级缓存
+关联：2.与mybatis-config.xml关联
+ -->
+<cache /> 
+<select id="select" resultType="java.lang.Integer">
+select ID from message where ID = 1
+</select>
+
+<select id="selectUserById" resultType="java.lang.String">
+select COMMEND from message where ID = #{id}
+</select>
+
+<select id="selectUserDoubleParam" resultType="java.lang.String">
+select COMMEND from message where ID = #{iid} or COMMEND=#{ccommend}
+</select>
+
+<select id="selectUserByObject" resultType="java.lang.String">
+select COMMEND from message where ID = #{id} or COMMEND=#{commend}
+</select>
+
+<select id="selectUserByMap" resultType="java.lang.String">
+select COMMEND from message where ID = #{1} AND COMMEND = #{key2}
+</select>
+
+<select id="selectUserByList" resultType="java.lang.String">
+select COMMEND from message where ID in
+<foreach collection="lists" open="(" close=")" item="list" index="1" separator=",">
+#{list}
+</foreach>
+</select>
+
+<insert id="insert" >
+INSERT into message(ID,COMMEND,DESCRIPTION,CONTENT)VALUES(4,'赵云4','长坂坡男人4','七进七出的赵云4')
+</insert>
+
+<update id="update">
+	UPDATE message SET COMMEND = '李白' WHERE ID = 4
+</update>
+
+<delete id="delect">
+	DELETE FROM message WHERE ID = 4
+</delete>
+
+
+
+</mapper>
+

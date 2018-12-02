@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suguowen.dao.MulTableMapper">
+
+<resultMap type="com.suguowen.model.Student" id="ShoolAndStudentByOneToOne">
+<id column="student_id" property="id"/>
+<result column="student_name" property="name"/>
+<result column="student_school" property="school"/>
+<association property="mySchool" javaType="com.suguowen.model.School">
+<id column="school_name" property="name"/>
+<result column="school_addr" property="address"/>
+</association>
+</resultMap>
+
+<!-- 一对多 -->
+<resultMap type="com.suguowen.model.School" id="ShoolAndStudentByOneToMore">
+<id column="school_name" property="name"/>
+<result column="school_addr" property="address"/>
+<collection property="student" ofType="com.suguowen.model.Student">
+<id column="student_id" property="id"/>
+<result column="student_name" property="name"/>
+<result column="student_school" property="school"/>
+</collection>
+</resultMap>
+
+<!-- 多对一 association→一 -->
+<resultMap type="com.suguowen.model.Student" id="ShoolAndStudentByMoreToOne">
+<id column="student_id" property="id"/>
+<result column="student_name" property="name"/>
+<result column="student_school" property="school"/>
+<association property="mySchool" javaType="com.suguowen.model.School">
+<id column="school_name" property="name"/>
+<result column="school_addr" property="address"/>
+</association>
+</resultMap>
+
+<select id="selectMessageByOneToOne" resultMap="ShoolAndStudentByOneToOne">
+SELECT * FROM school,student 
+where
+school.school_name = student.student_school
+AND
+student.student_school = '霍尔华兹3'
+</select>
+
+<select id="selectMessageByOneToMore" resultMap="ShoolAndStudentByOneToMore">
+SELECT * FROM school,student 
+where
+school.school_name = student.student_school
+AND
+school.school_name = '霍尔华兹2'
+</select>
+
+<select id="selectMessageByMoreToOne" resultMap="ShoolAndStudentByMoreToOne">
+SELECT * FROM school,student 
+where
+school.school_name = student.student_school
+AND
+school.school_name = '霍尔华兹2'
+</select>
+
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  <!-- 
+  功能：
+ 1.mybatis核心xml
+ 2.配置log4j
+ 3.获取dataSource的基础配置,连接数据库 
+ 4.注册UserMapper.xml
+   -->
+<configuration>
+<properties resource="dataSource.properties"/>
+<settings>
+<setting name="logImpl" value="LOG4J2" />
+<!-- 全局的开启或关闭配置文件中的所有映射已经配置的任何缓存 -->
+<!-- <setting name="cacheEnabled" value="true"/> -->
+<setting name="mapUnderscoreToCamelCase" value="false" />
+</settings>
+
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+      <!-- ${这里是properties} -->
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${jdbcUrl}"/>
+        <property name="username" value="${user}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+   <mappers>
+   <package name="com.mashen.mybatis.dao"/><!-- 把整个包都引进去了,不需要一个个引 -->
+    <!-- <mapper resource="com/mashen/mybatis/dao/UserMapper.xml"/> -->
+  </mappers> 
+
+  
+</configuration>
